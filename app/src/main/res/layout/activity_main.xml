@@ -7,6 +7,26 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/label_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/timestamp"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/label_time"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
         android:id="@+id/label_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,18 +34,18 @@
         android:layout_margin="32dp"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/label_time" />
 
     <TextView
         android:id="@+id/tv_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:text="56.12345"
+        android:text="0"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/label_latitude"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/label_time" />
+
 
     <TextView
         android:id="@+id/label_longitude"
@@ -42,9 +62,79 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:text="12.12345"
+        android:text="0"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/label_longitude"
         app:layout_constraintTop_toBottomOf="@+id/tv_latitude"
+        />
+
+    <TextView
+        android:id="@+id/label_altitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/altitude"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_longitude" />
+
+    <TextView
+        android:id="@+id/tv_altitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/label_accuracy"
+        app:layout_constraintTop_toBottomOf="@+id/tv_longitude"
+        />
+
+    <TextView
+        android:id="@+id/label_accuracy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/accuracy"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_altitude" />
+
+    <TextView
+        android:id="@+id/tv_accuracy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/label_accuracy"
+        app:layout_constraintTop_toBottomOf="@+id/label_altitude"
+        />
+
+    <TextView
+        android:id="@+id/label_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/speed"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_accuracy" />
+
+    <TextView
+        android:id="@+id/tv_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/label_speed"
+        app:layout_constraintTop_toBottomOf="@+id/label_accuracy"
+        />
+
+    <Button
+        android:id="@+id/btn_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:layout_margin="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_speed"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
