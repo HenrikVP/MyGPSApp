@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         getUpdates();
                     } else if (coarseLocationGranted != null && coarseLocationGranted) {
                         // Only approximate location access granted.
+                        getUpdates();
                     } else {
                         // No location access granted.
                         Toast.makeText(this, "F... U. Det er altså en GPS app, dummy.",
