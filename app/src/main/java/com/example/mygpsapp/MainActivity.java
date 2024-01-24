@@ -7,41 +7,58 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private TextView txt_time, txt_Lat, txt_Lon, txt_Acc, txt_Alt, txt_Spd;
-    private boolean havePermission = false;
+    private Button button;
+    public Location loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initGui();
-        permissions();
+        getPermissions();
+        button.setOnClickListener(view -> {
+            Intent myIntent = new Intent(MainActivity.this, OsmActivity.class);
+            myIntent.putExtra("Location", loc);
+            startActivity(myIntent);
+        });
+        //Is this the end?
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (havePermission) startLocationUpdates();
+        startLocationUpdates();
+        //Is THIS the end?
+//        while(true) {
+//            //I am immortal!!!
+//            Log.d("Main", "You cant kiiilll meeee!");
+//        }
     }
 
     private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissions();
+            getPermissions();
             return;
         }
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000).build();
@@ -49,37 +66,20 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) return;
                 for (Location location : locationResult.getLocations()) {
-                    updateView(location);
+                    loc = location;
+                    updateView(loc);
+
+                    if (button.getVisibility() == View.GONE){
+                        button.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }, Looper.getMainLooper());
     }
 
-    private void permissions() {
-        ActivityResultLauncher<String[]> locationPermissionRequest = registerForActivityResult(
-                new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-                    Boolean fineLocationGranted =
-                            result.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false);
-                    Boolean coarseLocationGranted =
-                            result.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false);
-                    if (fineLocationGranted != null && fineLocationGranted) {
-                        havePermission = true;
-                    } else if (coarseLocationGranted != null && coarseLocationGranted) {
-                        havePermission = true;
-                    } else {
-                        // No location access granted.
-                        Toast.makeText(this, "F... U. Det er altså en GPS app, dummy.",
-                                Toast.LENGTH_LONG).show();
-                        this.finish();
-                    }
-                });
-        locationPermissionRequest.launch(new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION});
-    }
-
     private void updateView(Location location) {
         txt_time.setText(String.valueOf(location.getTime()));
+        txt_time.setText(String.valueOf(new java.util.Date(location.getTime())));
         txt_Lat.setText(String.valueOf(location.getLatitude()));
         txt_Lon.setText(String.valueOf(location.getLongitude()));
         if (location.hasAccuracy())
@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
         if (location.hasAltitude())
             txt_Alt.setText(String.valueOf(location.getAltitude()));
         if (location.hasSpeed())
-            txt_Spd.setText(String.valueOf(location.getSpeed() * 3.6));
+            txt_Spd.setText(String.valueOf(Math.round(location.getSpeed() * 3.6)));
+
     }
 
     private void initGui() {
@@ -97,5 +98,25 @@ public class MainActivity extends AppCompatActivity {
         txt_Acc = findViewById(R.id.tv_accuracy);
         txt_Alt = findViewById(R.id.tv_altitude);
         txt_Spd = findViewById(R.id.tv_speed);
+        button = findViewById(R.id.btn_update);
+    }
+
+    public void getPermissions() {
+        ActivityResultLauncher<String[]> locationPermissionRequest = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+                    Boolean fineLocationGranted = result.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false);
+                    Boolean coarseLocationGranted = result.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false);
+                    if ((fineLocationGranted != null && fineLocationGranted) ||
+                            (coarseLocationGranted != null && coarseLocationGranted)) {
+                    } else {
+                        // No location access granted.
+                        Toast.makeText(this, "F... U. Det er altså en GPS app, dummy.",
+                                Toast.LENGTH_LONG).show();
+                        this.finish();
+                    }
+                });
+        locationPermissionRequest.launch(new String[]{
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION});
     }
 }

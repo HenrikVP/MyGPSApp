@@ -3,7 +3,8 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="accuracy">Accuracy</string>
-    <string name="timestamp">Timestamp</string>
+    <string name="timestamp">Time</string>
     <string name="altitude">Altitude</string>
     <string name="speed">Speed</string>
+    <string name="show_on_map">Show on Map</string>
 </resources>
