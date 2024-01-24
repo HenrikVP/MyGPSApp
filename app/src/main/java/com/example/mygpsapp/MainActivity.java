@@ -24,11 +24,11 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private TextView txt_time, txt_Lat, txt_Lon, txt_Acc, txt_Alt, txt_Spd;
     private Button button;
-    public Location loc;
+    public static Location loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +41,15 @@ public class MainActivity extends AppCompatActivity{
             myIntent.putExtra("Location", loc);
             startActivity(myIntent);
         });
-        //Is this the end?
-    }
 
+        Thread object = new Thread(new MultithreadingDemo());
+        object.start();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         startLocationUpdates();
-        //Is THIS the end?
-//        while(true) {
-//            //I am immortal!!!
-//            Log.d("Main", "You cant kiiilll meeee!");
-//        }
     }
 
     private void startLocationUpdates() {
@@ -69,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
                     loc = location;
                     updateView(loc);
 
-                    if (button.getVisibility() == View.GONE){
+                    if (button.getVisibility() == View.GONE) {
                         button.setVisibility(View.VISIBLE);
                     }
                 }
@@ -118,5 +114,19 @@ public class MainActivity extends AppCompatActivity{
         locationPermissionRequest.launch(new String[]{
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION});
+    }
+}
+
+class MultithreadingDemo implements Runnable {
+    public void run() {
+        try {
+            while (true) {
+                //I am immortal!!!
+                if (MainActivity.loc != null) Log.d("Main", String.valueOf(MainActivity.loc.getTime() ));
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
