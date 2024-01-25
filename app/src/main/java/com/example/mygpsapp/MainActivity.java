@@ -4,6 +4,7 @@ import android.Manifest;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -36,10 +37,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initGui();
         getPermissions();
+
+
+//        Intent sqlIntent = new Intent(MainActivity.this, Sql.class);
+//        //myIntent.putExtra("Location", loc);
+//        startActivity(sqlIntent);
+
         button.setOnClickListener(view -> {
             Intent myIntent = new Intent(MainActivity.this, OsmActivity.class);
             myIntent.putExtra("Location", loc);
             startActivity(myIntent);
+
         });
 
         Thread object = new Thread(new MultithreadingDemo());
@@ -59,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
         }
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000).build();
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(locationRequest, new LocationCallback() {
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) return;
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+
                 for (Location location : locationResult.getLocations()) {
                     loc = location;
                     updateView(loc);
@@ -119,11 +127,15 @@ public class MainActivity extends AppCompatActivity {
 
 class MultithreadingDemo implements Runnable {
     public void run() {
+
+        //Sql.startConn();
+
         try {
             while (true) {
-                //I am immortal!!!
-                if (MainActivity.loc != null) Log.d("Main", String.valueOf(MainActivity.loc.getTime() ));
-                Thread.sleep(1000);
+                //TODO Check if loc = old Loc
+                //if (MainActivity.loc != null) Log.d("Main", String.valueOf(MainActivity.loc.getTime() ));
+                Thread.sleep(3000);
+                Sql.selectFromDB();
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
